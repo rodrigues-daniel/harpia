@@ -4,18 +4,27 @@ import java.io.Serializable;
 
 import javax.servlet.annotation.WebServlet;
 
+import org.atmosphere.util.analytics.GoogleAnalytics_v1_URLBuildingStrategy;
 import org.vaadin.sliderpanel.SliderPanel;
 import org.vaadin.sliderpanel.SliderPanelBuilder;
 import org.vaadin.sliderpanel.SliderPanelStyles;
 import org.vaadin.sliderpanel.client.SliderMode;
 import org.vaadin.sliderpanel.client.SliderTabPosition;
 
+import com.google.gwt.maps.client.LoadApi.Language;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.cdi.CDIUI;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Sizeable;
+import com.vaadin.server.UserError;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.tapio.googlemaps.GoogleMap;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
@@ -23,6 +32,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.HorizontalLayout;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser
@@ -40,42 +50,49 @@ public class HarpiaUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
-		final VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout mainLayout = new VerticalLayout();
+		final HorizontalLayout subLayout = new HorizontalLayout();
 
-		layout.setSizeFull();
-		layout.setMargin(false);
-		layout.setSpacing(false);
+		mainLayout.setSizeFull();
+		subLayout.setSizeFull();
 		
-		Button button = new Button("Botao teste");
 		
-		button.addClickListener(new ClickListener(){
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				 
-				Notification.show("Botão Testado com sucesso!",Notification.Type.HUMANIZED_MESSAGE);
-				
-				
-			}
-			
-			
-			
-			
-		});
-
-		SliderPanel sliderPanel = new  SliderPanelBuilder(button)
-				.caption("Janela 1")
-				.mode(SliderMode.RIGHT)
-				.tabPosition(SliderTabPosition.BEGINNING)				
-				.style(SliderPanelStyles.COLOR_GRAY)
+		
+		SliderPanel sliderPanel = new  SliderPanelBuilder(new Label("Conteudo HTML",ContentMode.HTML))
+				.caption("Controle de Atendimentos")
+				.mode(SliderMode.TOP)
+				.tabPosition(SliderTabPosition.MIDDLE)				
+				.style(SliderPanelStyles.COLOR_BLUE)
 				.build();
 
-		layout.addComponent(sliderPanel);
-		layout.setComponentAlignment(sliderPanel,layout.ALIGNMENT_DEFAULT.TOP_RIGHT);
+		
+		mainLayout.addComponent(sliderPanel);
+		
+		
+		
+		
+		GoogleMap gmap = new GoogleMap("AIzaSyAV5v_BKb3vie085zaF3Ehl2zDAiZDd8s0",null,"english");
+		gmap.setSizeFull();	
+		gmap.setHeight("800");			
+			
+	 
+		subLayout.addComponent(gmap);
+	
+	 
+		 
+		
+		
+		
+		mainLayout.addComponent(subLayout);
+		mainLayout.setComponentAlignment(subLayout,Alignment.MIDDLE_CENTER);
+		
+	   
+	  
+	   mainLayout.setExpandRatio(subLayout,5);
 		 
 	    
 
-		setContent(layout);
+		setContent(mainLayout);
 	}
 	
 	
